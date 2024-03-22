@@ -89,8 +89,8 @@ namespace Bodog.Predictor.API
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().SetCompatibilityVersion(CompatibilityVersion.Latest);
-
+            //services.AddControllersWithViews().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddControllersWithViews();
             
             services.AddServices(Configuration);
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
