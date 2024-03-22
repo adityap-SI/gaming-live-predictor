@@ -1,0 +1,15 @@
+﻿@model String
+
+@if (!String.IsNullOrEmpty(Model))
+{
+    <table width="50%" align="center">
+        <tr>
+            <td>
+                <div id="divMessage" class="alert alert-dismissable text-center alert-warning">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    @Model
+                </div>
+            </td>
+        </tr>
+    </table>
+}

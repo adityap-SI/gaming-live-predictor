@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>bin\Debug\net6.0\Bodog.Predictor.API.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
+		<PackageReference Include="Microsoft.AspNetCore.App" Version="6.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.2" />
+		<!-- You might need to update versions of other packages depending on compatibility with .NET 6.0 -->
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Update project references to point to .NET 6.0 projects -->
+		<ProjectReference Include="..\Bodog.Predictor.Blanket\Live.Predictor.Blanket.csproj" />
+		<ProjectReference Include="..\Bodog.Predictor.Contracts\Live.Predictor.Contracts.csproj" />
+		<ProjectReference Include="..\Bodog.Predictor.Interfaces\Live.Predictor.Interfaces.csproj" />
+		<ProjectReference Include="..\Bodog.Predictor.Library\Live.Predictor.Library.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="ImageSharing\Fonts\" />
+		<Folder Include="ImageSharing\Images\Teams\" />
+		<Folder Include="ImageSharing\Images\Template\" />
+	</ItemGroup>
+
+</Project>

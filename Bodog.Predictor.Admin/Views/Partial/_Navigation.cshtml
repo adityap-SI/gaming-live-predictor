@@ -1,0 +1,18 @@
+﻿@model List<String>
+
+<section class="menu-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="navbar-collapse collapse ">
+                    <ul id="menu-top" class="nav navbar-nav navbar-right">
+                        @foreach (String nav in Model)
+                        {
+                            <li><a id="@("a" + nav.Replace(" ",""))" href="/admin/@nav.Replace(" ","")">@nav</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

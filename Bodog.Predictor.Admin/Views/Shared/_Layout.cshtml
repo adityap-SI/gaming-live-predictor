@@ -1,0 +1,57 @@
+﻿@{
+    @using Bodog.Predictor.Contracts.Configuration;
+
+    @inject Bodog.Predictor.Interfaces.Admin.ISession _Session
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor _HttpContextAccessor
+    @inject Microsoft.Extensions.Options.IOptions<Application> _AppSettings
+
+    List<String> _Pages = new List<string>();
+    ViewData["Connection"] = _AppSettings.Value.Connection.Environment;
+
+    if (!_Session._HasAdminCookie)
+    {
+        _HttpContextAccessor.HttpContext.Response.Redirect("/admin/" + "Login");
+    }
+    else
+    {
+        _Pages = _Session.Pages();
+
+        if (_Pages.Where(o => _HttpContextAccessor.HttpContext.Request.Path.Value.ToLower().Trim().IndexOf(o.Replace(" ", "").ToLower().Trim()) > -1).Count() < 1)
+        {
+            _HttpContextAccessor.HttpContext.Response.Redirect("/admin/" + _Pages.FirstOrDefault().Replace(" ", ""));
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bodog | @ViewData["Title"]</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+    @await Component.InvokeAsync("Controls", new { component = "_ScriptReferences", model = String.Empty })
+
+    <script type="text/javascript">
+        submitAlert = function () {
+            return confirm("This will submit to database?");
+        };
+    </script>
+</head>
+<body>
+    @await Component.InvokeAsync("Controls", new { component = "_Header", model = _Session })
+    @await Component.InvokeAsync("Controls", new { component = "_Navigation", model = _Pages })
+    <div>
+        @RenderBody()
+    </div>
+    @await Component.InvokeAsync("Controls", new { component = "_Footer", model = String.Empty })
+</body>
+</html>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

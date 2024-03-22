@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+
+@model Bodog.Predictor.Admin.Models.LoginModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bodog Admin | Login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+    @await Component.InvokeAsync("Controls", new { component = "_ScriptReferences", model = String.Empty })
+</head>
+<body>
+    <form id="loginForm" asp-controller="Home" asp-action="Login">
+        @ViewBag.Enc
+        <table width="20%" align="center" style="margin-top: 100px;">
+            <tr>
+                <td align="center">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            BODOG PREDICTOR ADMIN
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label asp-for="Username">Username</label>
+                                <input class="form-control" asp-for="Username" />
+                                <span asp-validation-for="Username" class="validation-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password">Password</label>
+                                <input class="form-control" asp-for="Password" />
+                                <span asp-validation-for="Password" class="validation-danger"></span>
+                            </div>
+                            <input type="submit" class="btn btn-success" value="Login" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        @await Component.InvokeAsync("Message", new { component = ViewBag?.MessageType, message = ViewBag?.MessageText })
+    </form>
+</body>
+</html>
