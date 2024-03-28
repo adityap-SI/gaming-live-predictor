@@ -39,15 +39,31 @@ namespace Bodog.Predictor.API.Controllers
         [ProducesResponseType(200)]
         public ActionResult Ping()
         {
+            return Ok("Bodog.Predictor.API v7.0");
+        }
+
+        /// <summary>
+        /// Create Swagger
+        /// </summary>
+        /// <param name="userPath"></param>
+        /// <returns></returns>
+        [HttpGet("createswagger")]
+        [ProducesResponseType(200)]
+        public ActionResult createswagger(string userPath)
+        {
+            string message = String.Empty;
             if (_Env.IsDevelopment())
             {
                 string jsonFile = "Bodog.Predictor.API.json";
-                string jsonPath = System.IO.Path.Combine(@"D:\GitHub\gaming-bodog-predictor\Bodog.Predictor.API\bin\Debug\netcoreapp2.1\", jsonFile);
-                string swaggerUrl = "http://localhost:56801/swagger/v1/swagger.json";
-                System.IO.File.WriteAllText(jsonPath, Library.Utility.GenericFunctions.GetWebData(swaggerUrl));
+                string jsonPath = userPath ?? @"D:\GitHub\gaming-bodog-predictor\Bodog.Predictor.API\bin\Debug\netcoreapp2.1\";
+                string jsonFullPath = System.IO.Path.Combine(jsonPath, jsonFile);
+                string swaggerDomain = HttpContext.Request.Headers.Host;
+                string swaggerUrl = $"http://{swaggerDomain}/swagger/v1/swagger.json";
+                System.IO.File.WriteAllText(jsonFullPath, Library.Utility.GenericFunctions.GetWebData(swaggerUrl));
+                message = $"Swagger Created at {jsonPath}";
             }
 
-            return Ok("Bodog.Predictor.API");
+            return Ok(message);
         }
 
         /// <summary>
