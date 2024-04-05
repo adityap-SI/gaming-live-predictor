@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="4.0.4" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICC.Predictor.Contracts\ICC.Predictor.Contracts.csproj" />
+    <ProjectReference Include="..\ICC.Predictor.Library\ICC.Predictor.Library.csproj" />
+  </ItemGroup>
+
+</Project>

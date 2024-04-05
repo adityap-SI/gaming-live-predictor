@@ -1,0 +1,111 @@
+﻿
+@model ICC.Predictor.Admin.Models.FeedIngestionModel
+
+<form id="feedIngestionForm" asp-controller="Home" asp-action="FeedIngestion">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row pad-botm">
+                <div class="col-md-12">
+                    <h4 class="header-line">FEED INGESTION</h4>
+                </div>
+            </div>
+
+            @await Component.InvokeAsync("Message", new { component = ViewBag?.MessageType, message = ViewBag?.MessageText })
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <div class="dataTables_wrapper form-inline" role="grid">
+                                <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Asset</th>
+                                            <th class="text-center">Input</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">Languages</td>
+                                            <td class="text-center"></td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="languages">Ingest</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Fixtures</td>
+                                            <td class="text-center"></td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="fixtures">Ingest</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Skills</td>
+                                            <td class="text-center"></td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="skills">Ingest</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Questions</td>
+                                            <td class="text-center">
+                                                <input type="text" asp-for="QuestionsMatchID" placeholder="*MatchID" class="form-control" />
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="questions">Ingest</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">All Match Questions</td>
+                                            <td class="text-center"></td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="allmatchquestions">Ingest</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Teams Recent Results</td>
+                                            <td class="text-center"></td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="teamsrecentresults">Ingest</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Match Status</td>
+                                            <td class="text-center">
+                                                <input type="text" asp-for="MatchId" placeholder="*MatchID" class="form-control" />
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="matchstatus">Ingest</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Leaderbaord</td>
+                                            <td class="text-center">
+                                                <input type="text" asp-for="LeaderBoardGamedayId" placeholder="*GameDayId" class="form-control" />
+                                                <input type="text" asp-for="LeaderBoardPhaseId" placeholder="*PhaseId" class="form-control" />
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="leaderboard">Ingest</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Current Gameday Matches</td>
+                                            <td class="text-center"></td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" name="process" value="currentgamedaymatches">Ingest</button>
+                                            </td>
+                                        </tr>                                        
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

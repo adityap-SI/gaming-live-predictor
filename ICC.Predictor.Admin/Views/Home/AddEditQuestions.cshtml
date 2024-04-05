@@ -1,0 +1,105 @@
+﻿@model ICC.Predictor.Contracts.Feeds.MatchQuestions
+@using ICC.Predictor.Contracts.Enums;
+
+@{
+    ViewData["Title"] = "AddEditQuestions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    String Heading = Model.QuestionType == "QS_TRIVIA" ? "Trivia Question" : "Predictor Question";
+}
+
+@await Component.InvokeAsync("Message", new { component = ViewBag?.MessageType, message = ViewBag?.MessageText })
+
+<script src="~/admin/js/AddEdit.js"></script>
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AddEditQuestions">
+            <div class="content-wrapper">
+                <div class="container">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <h2>@Heading - @ViewBag.Header </h2>
+
+                    <h4></h4>
+                    <hr />
+
+                    <div class="add-quetions-info">
+                        <div class="note">
+                            <p>
+                                You need to have more than 1 options for the user.
+                            </p>
+                            @if (Model.QuestionType == "QS_TRIVIA")
+                            {
+                                <p>
+                                    To save this question, Please select 1 option as the correct answer.
+                                </p>
+                            }
+                            @if (Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Resolved))
+                            {
+                                <p>
+                                    Please note: This Edit mode is only to fix typos or any other minor error in the question.
+                                    Do not change the option altogether as that may result in negative user feedback.
+                                </p>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Advanced Tables -->
+                    <div class="add-quetions">
+                        <div class="table-responsive">
+                            <div class="dataTables_wrapper form-inline" role="grid">
+                                @Html.TextAreaFor(a => a.QuestionDesc, new { @class = "col-md-8", @rows = 2, @placeholder = "Add Question" })
+                                <table class="table table-striped table-bordered table-hover dataTable no-footer col-md-2">
+                                    @*<tr>
+                                            <td></td>
+                                        </tr>*@
+
+                                    @{
+                                        for (var i = 0; i < Model.Options.Count; i++)
+                                        {
+                                            var j = i + 1;
+                                            <tr>
+                                                @Html.HiddenFor(a => a.Options[i].OptionId)
+                                                <td class="col-md-2">
+                                                    @Html.TextBoxFor(a => a.Options[i].OptionDesc, new { @class = "col-md-4", @placeholder = "Option " + j, @autocomplete = "off" })
+                                                    @if (Model.QuestionType == "QS_TRIVIA" || (Model.QuestionType == "QS_PRED" && (Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Locked) || Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Resolved))))
+                                                    {
+                                                        <span><input type="checkbox" asp-for="Options[i].IsCorrectBool" /></span>
+                                                    }
+                                                </td>
+                                                @*<td class="col-md-2">
+                                                        <input type="checkbox" asp-for="Options[i].IsCorrectBool" />
+                                                    </td>*@
+                                            </tr>
+                                        }
+                                    }
+
+                                </table>
+                                @Html.HiddenFor(a => a.MatchId)
+                                @Html.HiddenFor(a => a.QuestionId)
+                                @Html.HiddenFor(a => a.QuestionType)
+                                @Html.HiddenFor(a => a.QuestionStatus)
+                                <input type="hidden" name="header" id="header" value="@ViewBag.Header" />
+                                @*@{TempData["Header"] = ViewBag.Header;}*@
+                                @*<input type="submit" value="Save" />*@
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                    <div class="add-quetions-info">
+                        <div class="form-group">
+                            <span>
+                                <input type="submit" value="Save" class="btn btn-default" id="savebtn" />
+                            </span>
+                            <a href="@Url.Action("Questions","Home",new { matchId=Model.MatchId,header=ViewBag.Header,questionStatus=Model.QuestionStatus})">Back to List</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

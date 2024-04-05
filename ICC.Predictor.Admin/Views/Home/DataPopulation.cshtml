@@ -1,0 +1,97 @@
+﻿
+@model ICC.Predictor.Admin.Models.DataPopulationModel
+
+<form id="dataPopulationForm" asp-controller="Home" asp-action="DataPopulation">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row pad-botm">
+                <div class="col-md-12">
+                    <h4 class="header-line">DATA POPULATION</h4>
+                </div>
+            </div>
+
+            @await Component.InvokeAsync("Message", new { component = ViewBag?.MessageType, message = ViewBag?.MessageText })
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <div class="dataTables_wrapper form-inline" role="grid">
+                                <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Asset</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">Tournament</td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" onclick="return submitAlert();" name="process" value="tournament">Populate</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Series</td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" onclick="return submitAlert();" name="process" value="series">Populate</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br />
+                                <br />
+                                <table class="table table-striped table-bordered table-hover dataTable no-footer">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Asset</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">League</td>
+                                            <td class="text-center">
+                                                <input type="text" asp-for="League" placeholder="Name" class="form-control" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center" colspan="2">
+                                                <select asp-for="TournamentId" class="form-control" asp-items="@(new SelectList(Model.Tournament, "Id", "Name"))" onchange="this.form.submit()"></select>
+                                                <span style="padding-left : 100px">
+                                                    <select asp-for="SeriesId" class="form-control" asp-items="@(new SelectList(Model.Series, "Id", "Name"))" onchange="this.form.submit()"></select>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Fixtures</td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" onclick="return submitAlert();" name="process" value="fixtures">Populate</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Teams</td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" onclick="return submitAlert();" name="process" value="teams">Populate</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">Players</td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-info" onclick="return submitAlert();" name="process" value="players">Populate</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

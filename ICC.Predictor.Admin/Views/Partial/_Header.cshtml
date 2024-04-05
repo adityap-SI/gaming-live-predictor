@@ -1,0 +1,23 @@
+﻿@model ICC.Predictor.Interfaces.Admin.ISession
+
+<!-- Header -->
+<div class="navbar navbar-inverse set-radius-zero">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="Login">
+                <img src="/admin/images/logo.png">
+            </a>
+        </div>
+
+        <div class="right-div">
+            <div>Con: <b>@ViewData["Connection"].ToString().ToUpper()</b></div>
+            <input type="button" id="btnLogout" class="btn pull-right" value="LOG ME OUT" onclick="location.href='/admin/Logout'"/>
+        </div>
+    </div>
+</div>
+<!-- Header -->

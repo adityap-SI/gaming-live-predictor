@@ -1,0 +1,207 @@
+﻿@model ICC.Predictor.Admin.Models.QuestionsModel
+@using ICC.Predictor.Contracts.Enums
+
+
+<script src="~/admin/js/questions.js"></script>
+
+<form id="feedIngestionForm" asp-controller="Home" asp-action="Questions">
+
+    <style type="text/css">
+        .border-error {
+            border: 2px solid red !important;
+        }
+
+        .border-reset {
+            border: 1px solid #ccc !important;
+        }
+    </style>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row pad-botm">
+                <h4 class="header-line">Questions - @Model.Header</h4>
+
+                @await Component.InvokeAsync("Message", new { component = ViewBag?.MessageType, message = ViewBag?.MessageText })
+
+                <div class="tab_wrap">
+                    <span id="questions" class="tabclass">
+                        <a href="@Url.Action("Questions","Home",new { matchId= Model.MatchId,header=Model.Header,questionStatus=Convert.ToInt32(QuestionStatus.Unpublished)})" class="anchortag">Question Bank</a>
+                    </span>
+                    <span id="unresolved" class="tabclass">
+                        <a href="@Url.Action("Questions","Home",new { matchId= Model.MatchId,header=Model.Header,questionStatus=Convert.ToInt32(QuestionStatus.Published)})" class="anchortag">Unresolved</a>
+                    </span>
+                    <span id="resolved" class="tabclass">
+                        <a href="@Url.Action("Questions","Home",new { matchId= Model.MatchId,header=Model.Header,questionStatus=Convert.ToInt32(QuestionStatus.Resolved)})" class="anchortag">Resolved</a>
+                    </span>
+                    <span id="allquestion" class="tabclass">
+                        <a href="@Url.Action("Questions","Home",new { matchId= Model.MatchId,header=Model.Header,questionStatus=Convert.ToInt32(QuestionStatus.All)})" class="anchortag">All</a>
+                    </span>
+                    <span id="notification" class="tabclass">
+                        <a href="@Url.Action("Questions","Home",new { matchId= Model.MatchId,header=Model.Header,questionStatus=Convert.ToInt32(QuestionStatus.Notification)})" class="anchortag">Send Notifications</a>
+                    </span>
+                    <span id="pointscalculation" class="tabclass">
+                        <a href="@Url.Action("Questions","Home",new { matchId= Model.MatchId,header=Model.Header,questionStatus=Convert.ToInt32(QuestionStatus.Points_Calculation)})" class="anchortag">Points Calculation</a>
+                    </span>
+                </div>
+                @if (Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Unpublished).ToString())
+                {
+                    <div class="add_quetion_class">
+                        <a href="@Url.Action("AddEditQuestions","Home",new { matchId=Model.MatchId,questionId=0,questionType="QS_TRIVIA",header=Model.Header})" class="anchorbutton">Add Trivia</a>
+                        <a href="@Url.Action("AddEditQuestions","Home",new { matchId=Model.MatchId,questionId=0,questionType="QS_PRED",header=Model.Header})" class="anchorbutton">Add Predictor</a>
+                    </div>
+                }
+                <!-- Advanced Tables -->
+                <div class="table-responsive">
+                    <div class="dataTables_wrapper form-inline" role="grid">
+
+                        @if (Model.QuestionStatus != Convert.ToInt32(QuestionStatus.Notification).ToString() && Model.QuestionStatus != Convert.ToInt32(QuestionStatus.Points_Calculation).ToString())
+                        {
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer col-md-12">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center col-md-1">Sr No.</th>
+                                        <th class="text-center col-md-1">Type</th>
+                                        <th class="text-center col-md-4">Question</th>
+                                        <th class="text-center col-md-1">Option 1</th>
+                                        <th class="text-center col-md-1">Option 2</th>
+                                        <th class="text-center col-md-1">Option 3</th>
+                                        <th class="text-center col-md-1">Option 4</th>
+                                        @if (Model.QuestionStatus == Convert.ToInt32(QuestionStatus.All).ToString() || Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Published).ToString() || Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Locked).ToString())
+                                        {
+                                            <th class="text-center col-md-1">Status</th>
+                                        }
+                                        <th class="text-center col-md-3">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var i = 1;
+                                        foreach (var MatchQuestions in Model.matchQuestions)
+                                        {
+                                            <tr>
+                                                <td class="text-center col-md-1">@i</td>
+                                                <td class="text-center col-md-1">@Model.QuestionTypeFilter[@MatchQuestions.QuestionType]</td>
+                                                <td class="text-center col-md-4">@MatchQuestions.QuestionDesc</td>
+                                                @foreach (var option in @MatchQuestions.Options)
+                                                {
+                                                    if (option.IsCorrect == 1)
+                                                    {
+                                                        <td class="text-center col-md-1"><b><u>@option.OptionDesc</u></b></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-center col-md-1">@option.OptionDesc</td>
+                                                    }
+                                                }
+                                                @if (Model.QuestionStatus == Convert.ToInt32(QuestionStatus.All).ToString() || Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Published).ToString() || Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Locked).ToString())
+                                                {
+                                                    <td class="text-center col-md-1">@Model.QuestionStatusFilter[Convert.ToInt32(MatchQuestions.QuestionStatus)]</td>
+                                                }
+
+                                                @Html.HiddenFor(a => a.QuestionType)
+                                                <td class="action-button col-md-3">
+
+                                                    @if (MatchQuestions.QuestionStatus == Convert.ToInt32(QuestionStatus.Unpublished))
+                                                    {
+                                                        <b>
+                                                            @Html.ActionLink("Publish", "EditingQuestionStatus", "Home", new { matchId = Model.MatchId, questionId = @MatchQuestions.QuestionId, questionStatus = Convert.ToInt32(QuestionStatus.Published), header = Model.Header }, new { onclick = "return confirm('Do you want to post this question?')" })
+                                                        </b>
+                                                    }
+                                                    @if (MatchQuestions.QuestionStatus != -1)
+                                                    {
+                                                        <b><a href="@Url.Action("AddEditQuestions","Home",new { matchId=Model.MatchId,questionId=@MatchQuestions.QuestionId,questionType=@MatchQuestions.QuestionType,header=Model.Header})">Edit</a></b>
+
+                                                        @if (MatchQuestions.QuestionStatus == Convert.ToInt32(QuestionStatus.Unpublished))
+                                                        {
+                                                            <b>@Html.ActionLink("Delete", "EditingQuestionStatus", "Home", new { matchId = Model.MatchId, questionId = @MatchQuestions.QuestionId, questionStatus = Convert.ToInt32(QuestionStatus.Delete), header = Model.Header }, new { onclick = "return confirm('Do you want to delete this question?')" })</b>
+                                                        }
+                                                    }
+                                                    @if (MatchQuestions.QuestionStatus == Convert.ToInt32(QuestionStatus.Published))
+                                                    {
+                                                        <b> @Html.ActionLink("Lock", "EditingQuestionStatus", "Home", new { matchId = Model.MatchId, questionId = @MatchQuestions.QuestionId, questionStatus = Convert.ToInt32(QuestionStatus.Locked), header = Model.Header }, new { onclick = "return confirm('Do you want to lock this question?')" })</b>
+                                                    }
+                                                    @if (MatchQuestions.QuestionStatus == Convert.ToInt32(QuestionStatus.Locked) && MatchQuestions.Options.Any(a => a.IsCorrect == 1))
+                                                    {
+                                                        <b>@Html.ActionLink("Resolve", "EditingQuestionStatus", "Home", new { matchId = Model.MatchId, questionId = @MatchQuestions.QuestionId, questionStatus = Convert.ToInt32(QuestionStatus.Resolved), header = Model.Header }, new { onclick = "return confirm('Do you want to resolve this question?')" })</b>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else if (Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Notification).ToString())
+                        {
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer col-md-12">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center col-md-1">Sr No.</th>
+                                        <th class="text-center col-md-1">Type</th>
+                                        <th class="text-center col-md-4">Question</th>
+                                        <th class="text-center col-md-3">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var k = 1;
+                                        //String questionType = @MatchQuestions.QuestionType == "QS_PRED" ? "Prediction" : "Trivia";
+                                        <tr>
+                                            <td class="text-center col-md-1">@k</td>
+                                            <td class="text-center col-md-1">Notification</td>
+                                            <td class="text-center col-md-4">@Html.TextAreaFor(a => a.NotificationText, new { @class = "col-md-12", @rows = 3 })</td>
+                                            <td class="action-button col-md-3">
+                                                <b>@Html.ActionLink("Send Notification", "SendNotification", "Home", new { matchId = Model.MatchId, notificationText = "text", questionStatus = Convert.ToInt32(QuestionStatus.Notification), header = Model.Header }, new { onclick = "return confirm('Do you want to send the Notification?')", id = "sendNotification" })</b>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else if (Model.QuestionStatus == Convert.ToInt32(QuestionStatus.Points_Calculation).ToString())
+                        {
+                            <table class="table table-striped table-bordered table-hover dataTable no-footer col-md-12">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center col-md-1">Sr No.</th>
+                                        <th class="text-center col-md-1">Type</th>
+                                        <th class="text-center col-md-1">Input</th>
+                                        <th class="text-center col-md-3">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        //String questionType = @MatchQuestions.QuestionType == "QS_PRED" ? "Prediction" : "Trivia";
+                                        <tr>
+                                            <td class="text-center col-md-1">1</td>
+                                            <td class="text-center col-md-1">Points Calculation</td>
+                                            <td class="text-center col-md-1"></td>
+                                            <td class="action-button col-md-3">
+                                                <b>@Html.ActionLink("Calculate Point", "PointCalculation", "Home", new { matchId = Model.MatchId, questionStatus = Convert.ToInt32(QuestionStatus.Points_Calculation), header = Model.Header }, new { onclick = "return confirm('Do you want to calculate point?')" })</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center col-md-1">2</td>
+                                            <td class="text-center col-md-1">Abandon Match</td>
+                                            <td class="text-center col-md-1">
+                                                <select asp-for="AbandonedMatchId" class="form-control" asp-items="@(new SelectList(Model.Matches, "Id", "MatchName"))"></select>
+                                            </td>
+                                            <td class="action-button col-md-3">
+                                                <b>@Html.ActionLink("Abandon Match", "AbandonMatch", "Home", new { matchId = Model.MatchId, abandonedMatchId = "AbandonMatchId", questionStatus = Convert.ToInt32(QuestionStatus.Points_Calculation), header = Model.Header }, new { onclick = "return confirm('Do you want to Abandon Match?')", id = "abandonMatch" })</b>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        @Html.HiddenFor(a => a.MatchId)
+                        @Html.HiddenFor(a => a.Header)
+                    </div>
+                </div>
+                <!--End Advanced Tables -->
+            </div>
+
+        </div>
+    </div>
+</form>

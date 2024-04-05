@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\banner1.svg" />
+    <None Include="wwwroot\images\banner2.svg" />
+    <None Include="wwwroot\images\banner3.svg" />
+    <None Include="wwwroot\js\questions.js" />
+    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\js\site.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ICC.Predictor.Blanket\ICC.Predictor.Blanket.csproj" />
+    <ProjectReference Include="..\ICC.Predictor.Interfaces\ICC.Predictor.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>
