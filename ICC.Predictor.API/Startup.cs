@@ -89,7 +89,6 @@ namespace ICC.Predictor.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllersWithViews().SetCompatibilityVersion(CompatibilityVersion.Latest);
             services.AddControllersWithViews();
 
             services.AddServices(Configuration);
@@ -113,7 +112,7 @@ namespace ICC.Predictor.API
             //app.UseHttpsRedirection();
             app.UseStaticFiles(new StaticFileOptions() { RequestPath = "/api" });
             appLifetime.RegisterRedis(redis, appSettings);
-            app.RegisterSwagger(env);
+            app.RegisterSwagger(env,appSettings);
 
             app.UseCors(options => options.WithOrigins("https://localhost:3000").AllowAnyMethod().AllowCredentials());
 

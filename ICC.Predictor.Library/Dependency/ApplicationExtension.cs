@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace ICC.Predictor.Library.Dependency
 {
     public static class ApplicationExtension
     {
-
-
+        
         public static IHostApplicationLifetime RegisterRedis(this IHostApplicationLifetime app, IRedis redis, IOptions<Application> appSettings)
         {
             if (appSettings.Value.Connection.Redis.Apply)
@@ -22,14 +23,18 @@ namespace ICC.Predictor.Library.Dependency
             return app;
         }
 
-        public static IApplicationBuilder RegisterSwagger(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static IApplicationBuilder RegisterSwagger(this IApplicationBuilder app, IWebHostEnvironment env,IOptions<Application> appsettings)
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+            List<string> BasePathList = appsettings.Value.CustomSwaggerConfig.BasePathList;
+            string swaggerConfig = appsettings.Value.CustomSwaggerConfig.SwaggerConfig;
+            app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc,httpReq) =>
+                    BasePathList.ForEach(BasePath => swaggerDoc.Servers.Add(new OpenApiServer() { Url = BasePath }))
+            ));
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
-            string swaggerConfig = "/api/config/swagger/ICC.Predictor.API.json";
+            
 
             if (env.IsDevelopment())
                 swaggerConfig = "/swagger/v1/swagger.json";
@@ -39,6 +44,7 @@ namespace ICC.Predictor.Library.Dependency
                 //#TOREMEMBER
                 //reading swagger json from website's directory location.
                 c.SwaggerEndpoint(swaggerConfig, "ICC.Predictor.API V1");
+                
                 c.RoutePrefix = "api";
             });
 

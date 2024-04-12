@@ -12,6 +12,8 @@ namespace ICC.Predictor.Contracts.Configuration
 
         public API API { get; set; }
         public Admin Admin { get; set; }
+
+        public CustomSwaggerConfig CustomSwaggerConfig { get; set; }
     }
 
     #region "Children "
@@ -70,6 +72,13 @@ namespace ICC.Predictor.Contracts.Configuration
     {
         public int ExpiryDays { get; set; }
         public string Domain { get; set; }
+    }
+
+    public class CustomSwaggerConfig
+    {
+        public List<string> BasePathList { get; set; }
+
+        public string SwaggerConfig { get; set; }
     }
 
     #endregion "Children "
